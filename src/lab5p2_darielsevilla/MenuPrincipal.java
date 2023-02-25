@@ -916,7 +916,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
             int rando = random.nextInt(100) + 1;
             DefaultListModel m = (DefaultListModel) jl_game.getModel();
             m.clear();
-jl_game.setForeground(Color.green);
+            jl_game.setForeground(Color.green);
             String resp = jugador1.getNombre() + " le quito " + (jugador1.getAgilidadFisica() / 2) + " de hp a " + jugador2.getNombre() + " con atk. fisico";
             m.addElement(resp);
             resp = "vida de " + jugador2.getNombre() + " = " + jugador2.getHp();
@@ -934,7 +934,7 @@ jl_game.setForeground(Color.green);
             } else {
                 pierdeTurno = 0;
             }
-            System.out.println(jugador1.getHp());
+       
         } else {
             jugador1.setHp(jugador1.getHp() - (jugador2.getAgilidadFisica() / 2));
             int rando = random.nextInt(100) + 1;
@@ -959,7 +959,7 @@ jl_game.setForeground(Color.green);
             } else {
                 pierdeTurno = 0;
             }
-            System.out.println(jugador2.getHp());
+           
         }
 
         if (jugador1.getHp() <= 0) {
