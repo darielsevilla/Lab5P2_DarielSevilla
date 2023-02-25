@@ -11,6 +11,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
@@ -94,11 +95,11 @@ public class MenuPrincipal extends javax.swing.JFrame {
         lb_p1 = new javax.swing.JLabel();
         pn_p2 = new javax.swing.JPanel();
         lb_p2 = new javax.swing.JLabel();
-        jScrollPane5 = new javax.swing.JScrollPane();
-        jl_game = new javax.swing.JList<>();
         bt_atacar = new javax.swing.JButton();
         bt_mental = new javax.swing.JButton();
         bt_resistencia = new javax.swing.JButton();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        jtb_registro = new javax.swing.JTable();
         pn_menu = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         bt_simulacion = new javax.swing.JButton();
@@ -514,11 +515,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
         pn_juego.add(pn_p2, new org.netbeans.lib.awtextra.AbsoluteConstraints(474, 22, -1, -1));
 
-        jl_game.setModel(new DefaultListModel());
-        jScrollPane5.setViewportView(jl_game);
-
-        pn_juego.add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, 568, -1));
-
         bt_atacar.setText("Atk. fisico");
         bt_atacar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -547,6 +543,36 @@ public class MenuPrincipal extends javax.swing.JFrame {
             }
         });
         pn_juego.add(bt_resistencia, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 300, -1, -1));
+
+        jtb_registro.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
+            },
+            new String [] {
+                "Jugador", "Turno"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane6.setViewportView(jtb_registro);
+
+        pn_juego.add(jScrollPane6, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 60, -1, 180));
 
         javax.swing.GroupLayout jd_juegoLayout = new javax.swing.GroupLayout(jd_juego.getContentPane());
         jd_juego.getContentPane().setLayout(jd_juegoLayout);
@@ -596,6 +622,11 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
         bt_exit.setBackground(new java.awt.Color(255, 0, 0));
         bt_exit.setText("Eliminar");
+        bt_exit.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                bt_exitMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout pn_menuLayout = new javax.swing.GroupLayout(pn_menu);
         pn_menu.setLayout(pn_menuLayout);
@@ -902,30 +933,35 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jd_juego.pack();
         pn_p2.setVisible(false);
         pn_p1.setVisible(true);
+        DefaultTableModel m = (DefaultTableModel) jtb_registro.getModel();
+        m.setRowCount(0);
+    
         lb_p1.setText(jugador1.getNombre());
         lb_p2.setText(jugador2.getNombre());
         jd_juego.setLocationRelativeTo(this);
         jd_juego.setVisible(true);
 
-        DefaultListModel m = (DefaultListModel) jl_game.getModel();
-        m.clear();
+        
+        
     }
     private void bt_atacarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_atacarMouseClicked
         if (pn_p1.isVisible()) {
             jugador2.setHp(jugador2.getHp() - (jugador1.getAgilidadFisica() / 2));
             int rando = random.nextInt(100) + 1;
-            DefaultListModel m = (DefaultListModel) jl_game.getModel();
-            m.clear();
-            jl_game.setForeground(Color.green);
-            String resp = jugador1.getNombre() + " le quito " + (jugador1.getAgilidadFisica() / 2) + " de hp a " + jugador2.getNombre() + " con atk. fisico";
-            m.addElement(resp);
-            resp = "vida de " + jugador2.getNombre() + " = " + jugador2.getHp();
-
-            m.addElement(resp);
+            DefaultTableModel m = (DefaultTableModel) jtb_registro.getModel();
+            
+            jtb_registro.setForeground(Color.green);
+            String resp = "le quito " + (jugador1.getAgilidadFisica() / 2) + " de hp a " + jugador2.getNombre() + " con atk. fisico";
+            Object[] array = {jugador1.getNombre(),resp};
+            m.addRow(array);
+           
             if (rando >= 1 && rando <= 8) {
                 int oldHp = jugador1.getHp();
                 jugador1.setHp(jugador1.getHp() + (jugador1.getHp() / 4));
-                m.addElement(jugador1.getNombre() + " aumento su HP de " + oldHp + " a " + jugador1.getHp());
+                String a = " aumento su HP de " + oldHp + " a " + jugador1.getHp();
+                Object[] array2 = {jugador1.getNombre() , a};
+           
+                 m.addRow(array2);
             }
 
             if (pierdeTurno != 1) {
@@ -937,19 +973,20 @@ public class MenuPrincipal extends javax.swing.JFrame {
        
         } else {
             jugador1.setHp(jugador1.getHp() - (jugador2.getAgilidadFisica() / 2));
+            DefaultTableModel m = (DefaultTableModel) jtb_registro.getModel();
+            jtb_registro.setForeground(Color.red);
             int rando = random.nextInt(100) + 1;
-            DefaultListModel m = (DefaultListModel) jl_game.getModel();
-            m.clear();
-            jl_game.setForeground(Color.red);
-            String resp = jugador2.getNombre() + " le quito " + (jugador1.getAgilidadFisica() / 2) + " de hp a " + jugador1.getNombre() + " con atk. fisico";
-            m.addElement(resp);
-            resp = "vida de " + jugador1.getNombre() + " = " + jugador1.getHp();
-
-            m.addElement(resp);
+            String resp = "le quito " + (jugador2.getAgilidadFisica() / 2) + " de hp a " + jugador1.getNombre() + " con atk. fisico";
+            Object[] array = {jugador2.getNombre(),resp};
+            m.addRow(array);
+           
             if (rando >= 1 && rando <= 8) {
-                int oldHp = jugador2.getHp();
-                jugador2.setHp(jugador2.getHp() + (jugador2.getHp() / 4));
-                m.addElement(jugador2.getNombre() + " aumento su HP de " + oldHp + " a " + jugador2.getHp());
+                int oldHp = jugador1.getHp();
+                jugador1.setHp(jugador1.getHp() + (jugador1.getHp() / 4));
+                String a = "aumento su HP de " + oldHp + " a " + jugador1.getHp();
+                Object[] array2 = {jugador1.getNombre() , a};
+           
+            m.addRow(array2);
             }
 
             if (pierdeTurno != 1) {
@@ -987,17 +1024,18 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
             }
             jugador2.setHp(jugador2.getHp() - (jugador1.getAgilidadMental() / 3));
-            DefaultListModel m = (DefaultListModel) jl_game.getModel();
-            m.clear();
-            jl_game.setForeground(Color.green);
-            String resp = jugador1.getNombre() + " le quito " + damage + " de hp a " + jugador2.getNombre() + " con atk. mental";
-            m.addElement(resp);
+            DefaultTableModel m = (DefaultTableModel) jtb_registro.getModel();
+           
+            jtb_registro.setForeground(Color.green);
+            String resp = "le quito " + damage + " de hp a " + jugador2.getNombre() + " con atk. mental";
+            Object[] array = {jugador1.getNombre(), resp};
+            m.addRow(array);
             if (damage == (jugador1.getAgilidadMental() / 3) * 2) {
                 resp = "Oh! Golpe crítico! Its super effective!";
-                m.addElement(resp);
+                Object[] array2 = {jugador1.getNombre(), resp};
+                m.addRow(array2);
             }
-            resp = "vida de " + jugador2.getNombre() + " = " + jugador2.getHp();
-            m.addElement(resp);
+            
             if (pierdeTurno != 1) {
                 pn_p1.setVisible(false);
                 pn_p2.setVisible(true);
@@ -1014,18 +1052,17 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
             }
             jugador1.setHp(jugador1.getHp() - (jugador2.getAgilidadMental() / 3));
-            DefaultListModel m = (DefaultListModel) jl_game.getModel();
-            m.clear();
-            jl_game.setForeground(Color.red);
-            String resp = jugador2.getNombre() + " le quito " + damage + " de hp a " + jugador1.getNombre() + " con atk. mental";
-            m.addElement(resp);
+            DefaultTableModel m = (DefaultTableModel) jtb_registro.getModel();
+           
+            jtb_registro.setForeground(Color.red);
+            String resp ="le quito " + damage + " de hp a " + jugador1.getNombre() + " con atk. mental";
+            Object[] array = {jugador2.getNombre(), resp};
+            m.addRow(array);
             if (damage == (jugador2.getAgilidadMental() / 3) * 2) {
                 resp = "Oh! Golpe crítico! Its super effective!";
-                m.addElement(resp);
+                Object[] array2 = {jugador2.getNombre(), resp};
+                m.addRow(array2);
             }
-            resp = "vida de " + jugador1.getNombre() + " = " + jugador1.getHp();
-            m.addElement(resp);
-
             if (pierdeTurno != 1) {
                 pn_p1.setVisible(true);
                 pn_p2.setVisible(false);
@@ -1046,13 +1083,12 @@ public class MenuPrincipal extends javax.swing.JFrame {
         if (pn_p1.isVisible()) {
             int oldHp = jugador1.getHp();
             jugador1.setHp(jugador1.getHp()+(int)(jugador1.getFuerza()*0.15));
-            DefaultListModel m = (DefaultListModel) jl_game.getModel();
-            m.clear();
-            jl_game.setForeground(Color.green);
-            String resp = jugador1.getNombre() + " cambio su HP de " + oldHp + " a " + jugador1.getHp();
-            m.addElement( resp);
-            resp = "Pero pierde el siguiente turno!";
-            m.addElement(resp);
+            DefaultTableModel m = (DefaultTableModel) jtb_registro.getModel();
+            
+            jtb_registro.setForeground(Color.green);
+            String resp = "cambio su HP de " + oldHp + " a " + jugador1.getHp() + " Pero pierde el siguiente turno!";
+            Object[] array = {jugador1.getNombre(), resp};
+            m.addRow(array);
            
                 pn_p1.setVisible(false);
                 pn_p2.setVisible(true);
@@ -1060,14 +1096,13 @@ public class MenuPrincipal extends javax.swing.JFrame {
         } else {
             int oldHp = jugador2.getHp();
             jugador2.setHp(jugador2.getHp()+(int)(jugador2.getFuerza()*0.15));
-            DefaultListModel m = (DefaultListModel) jl_game.getModel();
-            m.clear();
-            jl_game.setForeground(Color.red);
-            String resp = jugador2.getNombre() + " cambio su HP de " + oldHp + " a " + jugador2.getHp();
-            m.addElement( resp);
-            resp = "Pero pierde el siguiente turno!";
-            m.addElement(resp);
-               
+            DefaultTableModel m = (DefaultTableModel) jtb_registro.getModel();
+            
+            jtb_registro.setForeground(Color.red);
+            String resp = "cambio su HP de " + oldHp + " a " + jugador2.getHp() + " Pero pierde el siguiente turno!";
+            Object[] array = {jugador2.getNombre(), resp};
+            m.addRow(array);
+           
                 pn_p2.setVisible(false);
                 pn_p1.setVisible(true);
             
@@ -1076,6 +1111,10 @@ public class MenuPrincipal extends javax.swing.JFrame {
         //este no tiene validacion porque si los 2 usan consecutivamente resistencia el siguiente q jugara es el jugador opuesto igual
         pierdeTurno = 1;
     }//GEN-LAST:event_bt_resistenciaMouseClicked
+
+    private void bt_exitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_exitMouseClicked
+        System.exit(0);        // TODO add your handling code here:
+    }//GEN-LAST:event_bt_exitMouseClicked
 
     public void crudCrear() {
         jd_crear.setModal(true);
@@ -1207,16 +1246,16 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JDialog jd_crear;
     private javax.swing.JDialog jd_juego;
     private javax.swing.JDialog jd_listar;
     private javax.swing.JDialog jd_simulacion;
-    private javax.swing.JList<String> jl_game;
     private javax.swing.JList<String> jl_listar;
     private javax.swing.JList<String> jl_player1;
     private javax.swing.JList<String> jl_player2;
     private javax.swing.JTree jt_personajes;
+    private javax.swing.JTable jtb_registro;
     private javax.swing.JLabel lb_p1;
     private javax.swing.JLabel lb_p2;
     private javax.swing.JMenuItem mi_modificar;
