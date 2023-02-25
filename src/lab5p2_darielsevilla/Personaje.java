@@ -98,7 +98,7 @@ public class Personaje {
 
     @Override
     public String toString() {
-        return "nombre:" + nombre + "\nhp: " + hp + "\nA. fisica: " + agilidadFisica + " A. mental: "+ agilidadMental+ "\npoder: " + poder + " debilidad: " + debilidad +"\nuniverso: " + universo;
+        return "<html>nombre:" + nombre + "<br>   hp: " + hp + "<br>   A. fisica: " + agilidadFisica + " A. mental: "+ agilidadMental+ "<br>   poder: " + poder + " debilidad: " + debilidad +"<br>   universo: " + universo + "</html>";
     }
     
     

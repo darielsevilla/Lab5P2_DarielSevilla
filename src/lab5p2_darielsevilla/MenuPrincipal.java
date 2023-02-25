@@ -5,7 +5,10 @@
 package lab5p2_darielsevilla;
 
 import java.util.ArrayList;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
@@ -15,10 +18,14 @@ import javax.swing.tree.DefaultTreeModel;
  */
 public class MenuPrincipal extends javax.swing.JFrame {
 
+    int pos = 0;
     ArrayList<Personaje> characters = new ArrayList();
+    Personaje actual = new Personaje();
+    DefaultMutableTreeNode nodoActual = new DefaultMutableTreeNode();
+
     public MenuPrincipal() {
         initComponents();
-        
+
     }
 
     /**
@@ -62,6 +69,18 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jl_listar = new javax.swing.JList<>();
         jLabel11 = new javax.swing.JLabel();
         bt_exit1 = new javax.swing.JButton();
+        pum_opCrud = new javax.swing.JPopupMenu();
+        mi_modificar = new javax.swing.JMenuItem();
+        mi_remove = new javax.swing.JMenuItem();
+        jd_simulacion = new javax.swing.JDialog();
+        jPanel3 = new javax.swing.JPanel();
+        jLabel12 = new javax.swing.JLabel();
+        cb_player1 = new javax.swing.JComboBox<>();
+        cb_player2 = new javax.swing.JComboBox<>();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jl_player1 = new javax.swing.JList<>();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        jl_player2 = new javax.swing.JList<>();
         pn_menu = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         bt_simulacion = new javax.swing.JButton();
@@ -253,8 +272,14 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
         javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("Personajes");
         jt_personajes.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
+        jt_personajes.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jt_personajesMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jt_personajes);
 
+        jl_listar.setModel(new DefaultListModel());
         jScrollPane2.setViewportView(jl_listar);
 
         jLabel11.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -311,6 +336,92 @@ public class MenuPrincipal extends javax.swing.JFrame {
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
+        mi_modificar.setText("Modificar");
+        mi_modificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mi_modificarActionPerformed(evt);
+            }
+        });
+        pum_opCrud.add(mi_modificar);
+
+        mi_remove.setText("eliminar");
+        mi_remove.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mi_removeActionPerformed(evt);
+            }
+        });
+        pum_opCrud.add(mi_remove);
+
+        jPanel3.setBackground(new java.awt.Color(153, 255, 255));
+
+        jLabel12.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel12.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel12.setText("Final Fight ");
+
+        cb_player1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        cb_player2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        jl_player1.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane3.setViewportView(jl_player1);
+
+        jl_player2.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane4.setViewportView(jl_player2);
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel12)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(16, 16, 16)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane3)
+                    .addComponent(cb_player1, 0, 253, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 108, Short.MAX_VALUE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(cb_player2, 0, 253, Short.MAX_VALUE)
+                    .addComponent(jScrollPane4))
+                .addGap(28, 28, 28))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel12)
+                .addGap(53, 53, 53)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cb_player1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cb_player2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(168, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout jd_simulacionLayout = new javax.swing.GroupLayout(jd_simulacion.getContentPane());
+        jd_simulacion.getContentPane().setLayout(jd_simulacionLayout);
+        jd_simulacionLayout.setHorizontalGroup(
+            jd_simulacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        jd_simulacionLayout.setVerticalGroup(
+            jd_simulacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         pn_menu.setBackground(new java.awt.Color(153, 255, 255));
@@ -320,6 +431,11 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jLabel1.setText("Laboratorio N°5");
 
         bt_simulacion.setText("Simulación");
+        bt_simulacion.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                bt_simulacionMouseClicked(evt);
+            }
+        });
 
         bt_crear.setText("Crear");
         bt_crear.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -335,6 +451,9 @@ public class MenuPrincipal extends javax.swing.JFrame {
         bt_listar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 bt_listarMouseClicked(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                bt_listarMousePressed(evt);
             }
         });
 
@@ -390,36 +509,67 @@ public class MenuPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void bt_addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_addActionPerformed
-        
-            String universe = "";
-            if(rb_marvel.isSelected()){
-                universe = "Marvel";
-            }else if(rb_dc.isSelected()){
-                universe = "DC";
-            }else if(rb_capcom.isSelected()){
-                universe = "Capcom";
-            }else if(rb_mk.isSelected()){
-                universe = "MK";
+
+        String universe = "";
+        if (rb_marvel.isSelected()) {
+            universe = "Marvel";
+        } else if (rb_dc.isSelected()) {
+            universe = "DC";
+        } else if (rb_capcom.isSelected()) {
+            universe = "Capcom";
+        } else if (rb_mk.isSelected()) {
+            universe = "MK";
+        }
+
+        if (!tf_nombre.getText().equals("") && !tf_poder.getText().equals("") && !tf_debilidad.getText().equals("")) {
+            String name = tf_nombre.getText();
+            int repeats = 0;
+            for (Personaje character : characters) {
+                if (name.equals(character.getNombre())) {
+                    if (pos == 0 || (pos == 1 && !actual.getNombre().equals(name))) {
+                        repeats++;
+                    }
+                }
             }
-            if(!tf_nombre.getText().equals("") && !tf_poder.getText().equals("") && !tf_debilidad.getText().equals("")){
-                characters.add(new Personaje(tf_nombre.getText(), (int)sp_agilidadFisica.getValue(), tf_poder.getText(), tf_debilidad.getText(), universe, (int)sp_agilidadMental.getValue(),(int) sp_fuerza.getValue(),(int)sp_hp.getValue()));
+            if (repeats > 0) {
+                name += "(" + (repeats + 1) + ")";
+            }
+            if (pos == 0) {
+                characters.add(new Personaje(name, (int) sp_agilidadFisica.getValue(), tf_poder.getText(), tf_debilidad.getText(), universe, (int) sp_agilidadMental.getValue(), (int) sp_fuerza.getValue(), (int) sp_hp.getValue()));
                 JOptionPane.showMessageDialog(jd_crear, "Personaje Ingreso Exitosamente");
-                
-                tf_nombre.setText("");
-                tf_poder.setText("");
-                tf_debilidad.setText("");
-                sp_agilidadFisica.setValue(100);
-                sp_agilidadMental.setValue(100);
-                sp_fuerza.setValue(100);
-                sp_hp.setValue(100);
-                
-                rb_marvel.setSelected(true);
+            } else {
+
+                String test = actual.getUniverso();
+                pos = 0;
+                characters.get(characters.indexOf(actual)).setNombre(name);
+                characters.get(characters.indexOf(actual)).setDebilidad(tf_debilidad.getText());
+                characters.get(characters.indexOf(actual)).setUniverso(universe);
+                characters.get(characters.indexOf(actual)).setAgilidadFisica((int) sp_agilidadFisica.getValue());
+                characters.get(characters.indexOf(actual)).setAgilidadMental((int) sp_agilidadMental.getValue());
+                characters.get(characters.indexOf(actual)).setPoder(tf_poder.getText());
+                characters.get(characters.indexOf(actual)).setFuerza((int) sp_fuerza.getValue());
+                characters.get(characters.indexOf(actual)).setHp((int) sp_hp.getValue());
+
+                jd_listar.setVisible(false);
                 jd_crear.setVisible(false);
-                
-            }else{
-                JOptionPane.showMessageDialog(null, "Ingrese un valor en todos los campos");
+
             }
-        
+            tf_nombre.setText("");
+            tf_poder.setText("");
+            tf_debilidad.setText("");
+            sp_agilidadFisica.setValue(100);
+            sp_agilidadMental.setValue(100);
+            sp_fuerza.setValue(100);
+            sp_hp.setValue(100);
+
+            rb_marvel.setSelected(true);
+            jd_crear.setVisible(false);
+
+        } else {
+            JOptionPane.showMessageDialog(null, "Ingrese un valor en todos los campos");
+        }
+
+
     }//GEN-LAST:event_bt_addActionPerformed
 
     private void bt_crearMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_crearMouseClicked
@@ -427,7 +577,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_bt_crearMouseClicked
 
     private void bt_exit1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_exit1MouseClicked
-        jd_listar.setVisible(false);        
+        jd_listar.setVisible(false);
     }//GEN-LAST:event_bt_exit1MouseClicked
 
     private void bt_listarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_listarMouseClicked
@@ -438,28 +588,141 @@ public class MenuPrincipal extends javax.swing.JFrame {
         crudCrear();        // TODO add your handling code here:
     }//GEN-LAST:event_bt_crearMousePressed
 
-    public void crudCrear(){
+    private void bt_listarMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_listarMousePressed
+        crudListar();        // TODO add your handling code here:
+    }//GEN-LAST:event_bt_listarMousePressed
+
+    private void jt_personajesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jt_personajesMouseClicked
+        if (SwingUtilities.isRightMouseButton(evt)) {
+            DefaultListModel a = (DefaultListModel) jl_listar.getModel();
+
+            jt_personajes.setSelectionRow(jt_personajes.getClosestRowForLocation(evt.getX(), evt.getY()));
+            DefaultMutableTreeNode node = (DefaultMutableTreeNode) jt_personajes.getSelectionPath().getLastPathComponent();
+            nodoActual = node;
+            String name = (String) node.getUserObject();
+
+            int is = 0;
+            for (Personaje character : characters) {
+                if (name.equals(character.getNombre())) {
+                    actual = character;
+                    is = 2;
+                    break;
+                } else if (name.equals(character.getUniverso())) {
+                    is = 1;
+
+                    break;
+                }
+            }
+
+            a.clear();
+            if (is == 1) {
+
+                for (int i = 0; i < node.getChildCount(); i++) {
+
+                    for (Personaje character : characters) {
+                        if (((String) ((DefaultMutableTreeNode) node.getChildAt(i)).getUserObject()).equals(character.getNombre())) {
+                            actual = character;
+                        }
+                    }
+                    a.addElement(actual);
+                }
+            } else if (is == 2) {
+
+                a.addElement("Nombre -> " + actual.getNombre());
+                a.addElement("HP -> " + actual.getHp());
+                a.addElement("Fuerza -> " + actual.getFuerza());
+                a.addElement("Poder -> " + actual.getPoder());
+                a.addElement("Debilidad -> " + actual.getDebilidad());
+                a.addElement("Agilidad Fisica -> " + actual.getAgilidadFisica());
+                a.addElement("Agilidad Mental -> " + actual.getAgilidadMental());
+                a.addElement("Universo -> " + actual.getUniverso());
+                pum_opCrud.show(jd_listar, evt.getX(), evt.getY());
+            }
+
+        }
+
+    }//GEN-LAST:event_jt_personajesMouseClicked
+
+    private void mi_modificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mi_modificarActionPerformed
+        tf_nombre.setText(actual.getNombre());
+        tf_poder.setText(actual.getPoder());
+        tf_debilidad.setText(actual.getDebilidad());
+        sp_fuerza.setValue(actual.getFuerza());
+        sp_agilidadFisica.setValue(actual.getAgilidadFisica());
+        sp_agilidadMental.setValue(actual.getAgilidadMental());
+        sp_hp.setValue(actual.getHp());
+
+        if (actual.getUniverso().equals("Marvel")) {
+            rb_marvel.setSelected(true);
+        } else if (actual.getUniverso().equals("DC")) {
+            rb_dc.setSelected(true);
+        } else if (actual.getUniverso().equals("Capcom")) {
+            rb_capcom.setSelected(true);
+        } else {
+            rb_mk.setSelected(true);
+        }
+        pos = 1;
+        crudCrear();
+
+
+    }//GEN-LAST:event_mi_modificarActionPerformed
+
+    private void mi_removeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mi_removeActionPerformed
+
+        DefaultTreeModel nuevo = (DefaultTreeModel) jt_personajes.getModel();
+        nuevo.removeNodeFromParent(nodoActual);
+        DefaultMutableTreeNode raiz = (DefaultMutableTreeNode) nuevo.getRoot();
+        for (int i = 0; i < raiz.getChildCount(); i++) {
+            if (((DefaultMutableTreeNode) raiz.getChildAt(i)).getChildCount() == 0) {
+                nuevo.removeNodeFromParent(((DefaultMutableTreeNode) raiz.getChildAt(i)));
+            }
+        }
+        nuevo.reload();
+    }//GEN-LAST:event_mi_removeActionPerformed
+
+    private void bt_simulacionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_simulacionMouseClicked
+        finalFight();        // TODO add your handling code here:
+    }//GEN-LAST:event_bt_simulacionMouseClicked
+
+    public void crudCrear() {
         jd_crear.setModal(true);
         jd_crear.pack();
         jd_crear.setLocationRelativeTo(this);
         jd_crear.setVisible(true);
     }
-    
-    public void crudListar(){
-       DefaultTreeModel m = (DefaultTreeModel) jt_personajes.getModel();
-       DefaultMutableTreeNode raiz = (DefaultMutableTreeNode) m.getRoot();
-       raiz.removeAllChildren();
+
+    public void finalFight() {
+
+        DefaultComboBoxModel modelo1 = (DefaultComboBoxModel) cb_player1.getModel();
+        DefaultComboBoxModel modelo2 = (DefaultComboBoxModel) cb_player2.getModel();
+        for (Personaje character : characters) {
+            modelo1.addElement(character.getNombre());
+            modelo2.addElement(character.getNombre());
+        }
+
+        jd_simulacion.setModal(true);
+        jd_simulacion.pack();
+        jd_simulacion.setLocationRelativeTo(this);
+        jd_simulacion.setVisible(true);
+
+    }
+
+    public void crudListar() {
+
+        DefaultTreeModel m = (DefaultTreeModel) jt_personajes.getModel();
+        DefaultMutableTreeNode raiz = (DefaultMutableTreeNode) m.getRoot();
+        raiz.removeAllChildren();
         for (Personaje character : characters) {
             int isThere = 0;
             for (int i = 0; i < raiz.getChildCount(); i++) {
-                if(((DefaultMutableTreeNode) raiz.getChildAt(i)).getUserObject().equals(character.getUniverso())){
+                if (((DefaultMutableTreeNode) raiz.getChildAt(i)).getUserObject().equals(character.getUniverso())) {
                     DefaultMutableTreeNode nodo = new DefaultMutableTreeNode(character.getNombre());
                     ((DefaultMutableTreeNode) raiz.getChildAt(i)).add(nodo);
                     isThere++;
                 }
             }
-            
-            if(isThere == 0){
+
+            if (isThere == 0) {
                 DefaultMutableTreeNode uni = new DefaultMutableTreeNode(character.getUniverso());
                 DefaultMutableTreeNode nodo = new DefaultMutableTreeNode(character.getNombre());
                 uni.add(nodo);
@@ -467,12 +730,13 @@ public class MenuPrincipal extends javax.swing.JFrame {
             }
         }
         m.reload();
-        
+
         jd_listar.setModal(true);
         jd_listar.pack();
         jd_listar.setLocationRelativeTo(this);
         jd_listar.setVisible(true);
     }
+
     /**
      * @param args the command line arguments
      */
@@ -516,9 +780,12 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton bt_listar;
     private javax.swing.JButton bt_simulacion;
     private javax.swing.ButtonGroup btg_universo;
+    private javax.swing.JComboBox<String> cb_player1;
+    private javax.swing.JComboBox<String> cb_player2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -529,13 +796,22 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JDialog jd_crear;
     private javax.swing.JDialog jd_listar;
+    private javax.swing.JDialog jd_simulacion;
     private javax.swing.JList<String> jl_listar;
+    private javax.swing.JList<String> jl_player1;
+    private javax.swing.JList<String> jl_player2;
     private javax.swing.JTree jt_personajes;
+    private javax.swing.JMenuItem mi_modificar;
+    private javax.swing.JMenuItem mi_remove;
     private javax.swing.JPanel pn_menu;
+    private javax.swing.JPopupMenu pum_opCrud;
     private javax.swing.JRadioButton rb_capcom;
     private javax.swing.JRadioButton rb_dc;
     private javax.swing.JRadioButton rb_marvel;
